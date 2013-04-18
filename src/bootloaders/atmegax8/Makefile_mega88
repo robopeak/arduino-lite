@@ -1,0 +1,137 @@
+# Makefile for ATmegaBOOT
+# E.Lins, 18.7.2005
+# $Id$
+#
+# Instructions
+#
+# To make bootloader .hex file:
+# make diecimila
+# make lilypad
+# make ng
+# etc...
+#
+# To burn bootloader .hex file:
+# make diecimila_isp
+# make lilypad_isp
+# make ng_isp
+# etc...
+
+# program name should not be changed...
+PROGRAM    = ATmegaBOOT_88
+
+# enter the parameters for the avrdude isp tool
+ISPTOOL	   = stk500v2
+ISPPORT	   = usb
+ISPSPEED   = -b 115200
+
+MCU_TARGET = atmega88
+LDSECTION  = --section-start=.text=0x1800
+
+DIRAVR = ../../../../../../bin/win32/WinAVR-20090313
+DIRAVRBIN = $(DIRAVR)/bin
+DIRAVRUTILS = $(DIRAVR)/utils/bin
+DIRINC = $(DIRAVR)/avr/include
+DIRLIB = $(DIRAVR)/avr/lib
+
+# the efuse should really be 0xf8; since, however, only the lower
+# three bits of that byte are used on the atmega168, avrdude gets
+# confused if you specify 1's for the higher bits, see:
+# http://tinker.it/now/2007/02/24/the-tale-of-avrdude-atmega168-and-extended-bits-fuses/
+#
+# similarly, the lock bits should be 0xff instead of 0x3f (to
+# unlock the bootloader section) and 0xcf instead of 0x0f (to
+# lock it), but since the high two bits of the lock byte are
+# unused, avrdude would get confused.
+
+ISPFUSES    = avrdude -c $(ISPTOOL) -p $(MCU_TARGET) -P $(ISPPORT) $(ISPSPEED) \
+-e -u -U lock:w:0x3f:m -U efuse:w:0x$(EFUSE):m -U hfuse:w:0x$(HFUSE):m -U lfuse:w:0x$(LFUSE):m
+ISPFLASH    = avrdude -c $(ISPTOOL) -p $(MCU_TARGET) -P $(ISPPORT) $(ISPSPEED) \
+-U flash:w:$(PROGRAM)_$(TARGET).hex -U lock:w:0x0f:m
+
+STK500 = "C:\Program Files\Atmel\AVR Tools\STK500\Stk500.exe"
+STK500-1 = $(STK500) -e -d$(MCU_TARGET) -pf -vf -if$(PROGRAM)_$(TARGET).hex \
+-lFF -LFF -f$(HFUSE)$(LFUSE) -EF8 -ms -q -cUSB -I200kHz -s -wt
+STK500-2 = $(STK500) -d$(MCU_TARGET) -ms -q -lCF -LCF -cUSB -I200kHz -s -wt
+
+
+OBJ        = ATmegaBOOT_168.o
+OPTIMIZE   = -Os
+
+DEFS       = 
+LIBS       =
+
+CC         = $(DIRAVRBIN)/avr-gcc
+
+# Override is only needed by avr-lib build system.
+
+override CFLAGS        = -g -Wall $(OPTIMIZE) -mmcu=$(MCU_TARGET) -DF_CPU=$(AVR_FREQ) $(DEFS) -I$(DIRINC)
+override LDFLAGS       = -Wl,$(LDSECTION)
+#override LDFLAGS       = -Wl,-Map,$(PROGRAM).map,$(LDSECTION)
+
+OBJCOPY        = $(DIRAVRBIN)/avr-objcopy
+OBJDUMP        = $(DIRAVRBIN)/avr-objdump
+
+all:
+pro12: TARGET = pro_12MHz
+pro12: CFLAGS += '-DMAX_TIME_COUNT=F_CPU>>4' '-DNUM_LED_FLASHES=1' 
+pro12: AVR_FREQ = 12000000L
+pro12: $(PROGRAM)_pro_12MHz.hex
+
+pro12_isp: pro12
+pro12_isp: TARGET = pro_12MHz
+pro12_isp: HFUSE = DD
+pro12_isp: LFUSE = C6
+pro12_isp: EFUSE = 00
+pro12_isp: isp
+
+pro8: TARGET = pro_8MHz
+pro8: CFLAGS += '-DMAX_TIME_COUNT=F_CPU>>4' '-DNUM_LED_FLASHES=1' 
+pro8: AVR_FREQ = 8000000L
+pro8: $(PROGRAM)_pro_8MHz.hex
+
+pro8_isp: pro8
+pro8_isp: TARGET = pro_8MHz
+pro8_isp: HFUSE = DD
+pro8_isp: LFUSE = C6
+pro8_isp: EFUSE = 00
+pro8_isp: isp
+
+diecimila: TARGET = diecimila
+diecimila: CFLAGS += '-DMAX_TIME_COUNT=F_CPU>>4' '-DNUM_LED_FLASHES=1'
+diecimila: AVR_FREQ = 16000000L 
+diecimila: $(PROGRAM)_diecimila.hex
+
+diecimila_isp: diecimila
+diecimila_isp: TARGET = diecimila
+diecimila_isp: HFUSE = DD
+diecimila_isp: LFUSE = FF
+diecimila_isp: EFUSE = 00
+diecimila_isp: isp
+
+
+isp: $(TARGET)
+	$(ISPFUSES)
+	$(ISPFLASH)
+
+isp-stk500: $(PROGRAM)_$(TARGET).hex
+	$(STK500-1)
+	$(STK500-2)
+
+%.elf: $(OBJ)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+clean:
+	rm -rf *.o *.elf *.lst *.map *.sym *.lss *.eep *.srec *.bin *.hex
+
+%.lst: %.elf
+	$(OBJDUMP) -h -S $< > $@
+
+%.hex: %.elf
+	$(OBJCOPY) -j .text -j .data -O ihex $< $@
+
+%.srec: %.elf
+	$(OBJCOPY) -j .text -j .data -O srec $< $@
+
+%.bin: %.elf
+	$(OBJCOPY) -j .text -j .data -O binary $< $@
+	

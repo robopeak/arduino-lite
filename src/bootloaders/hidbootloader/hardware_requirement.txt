@@ -1,0 +1,12 @@
+This bootloader firmware only support the following chips currently:
+Atmega88/Atmega168/Atmega8
+
+Any other types of AVR chip with a 2k-byte bootloader section is also supported in theory, but some code changes are needed.
+
+To use this bootloader, make sure a v-usb compatible schematic is used with the 12M cpu clock.
+
+PIN MAPPING:
+------------------
+The bootloader enabling condition:  PC1 == HIGH
+USB D+: B1
+USB D-: B0

@@ -1,0 +1,105 @@
+Welcome to use Arduino-Lite, the light-weight and efficient arduino-variant runtime library for AVR based devices.
+
+Arduino-Lite is based on the work of Arduino Project: www.arduino.cc
+
+This library is orignally used by RoboPeak team (www.robopeak.com) and we are proud of releasing it to the public. 
+
+Project website: http://code.google.com/p/arduino-lite
+RoboPeak Prject: http://www.robopeak.com
+
+---------------------------
+  First Use:
+---------------------------
+If it is the first time for this lib to run on the machine (checked-out from the SVN, extracted from the downloaded package file), please follow these steps:
+  
+  a. make sure the current platform is supported (see Support Platforms)
+  c. execute the batch file: buildenv.cmd under the source root
+     This script will extract the WinAVR automatically and configure the working envirnoment.
+  b. you are ready to use Arduino-Lite after the script exit
+
+Arduino-Lite is self-contained, which means you don't need to install/download any extra software/lib before (Yes, Arduino-lite also includes WINAVR for you). 
+  
+---------------------------
+  Supported Platforms:
+---------------------------
+The source code shoud work on all platforms (Linux, MacOS, Win32) but the build system only supports Win32 currently.
+
+We had verified the following Windows versions:
+<> Windows XP 32bit
+<> Windows Vista 32bit and 64bit
+<> Windows 7 32bit and 64bit
+
+---------------------------
+  Create New Project
+---------------------------
+Arduino-Lite Project can be created via the template file under <Arduino-lite home>/sketch/template.zip
+
+To create your own project:
+1) extract the template.zip under the folder <Arduino-lite home>/sketch
+2) make sure the extracted folder is like the following:
+    <Arduino-lite home>/sketch/template/build.cmd
+3) rename the dir template to any name you like, e.g. helloAVR
+4) You have done.
+
+---------------------------
+  Compile a Project
+---------------------------
+1) enter the project folder (e.g. helloAVR), execute the batch file launchsh.cmd
+2) type make <enter>
+3) If there is no error during the building phase, you will get the hex/elf file under <project_folder>/build/
+
+---------------------------
+  Documents?
+---------------------------
+You may refer to the following links:
+  Introduction to Arduino-Lite:
+     http://www.robopeak.net/blog/?p=131
+
+  How to install and use Arduino-Lite:
+     http://www.robopeak.net/blog/?p=151
+
+  Arduino-Lite Interface & Development Mannual
+     http://www.robopeak.net/blog/?p=107 
+
+  Arduino-Lite Project homepage:
+     http://code.google.com/p/arduino-lite
+
+Besides, you may check RoboPeak website(http://www.robopeak.com) for additional tips. (some articles may written in Chinese only)
+
+As Arduino-Lite are similar to the offical Arduino library, you will find most function calls are alike. So the offical Arduino referece document is helpful.
+
+
+---------------------------
+  Avaliable Make Commands
+---------------------------
+Compiling Related:
+<> make/make all
+   build the current project
+<> make clean
+   clean the previous build result
+
+Chip programming and setting:
+<> make upload
+   upload the hex to the AVR chip (via STK500v2 bootloader, serial-cable)
+<> make usbupload
+   upload the the to the AVR chip via USB cable (require BootloaderHID)
+<> make burn
+   burning the hex to the AVR chip via RoboPeak USB Connector programmer (or any AVR-Doper compatible devices)
+<> make erase
+   erase the AVR chip via RoboPeak USB Connector programmer (or any AVR-Doper compatible devices)
+<> make fuse
+   configure the AVR chip's fuse setting via RoboPeak USB Connector programmer (or any AVR-Doper compatible devices)
+<> make lock
+   configure the AVR chip's lock-bit setting via RoboPeak USB Connector programmer (or any AVR-Doper compatible devices)
+
+Code analysis & debugging
+<> make dump
+   disassembly the generated binary (*.elf) to AVR assembly code
+<> make dumpobj
+   disassembly each generated object file (*.o) to AVR assembly code
+
+---------------------------
+  Contact the Author
+---------------------------
+The inital developer of Arduino-Lite is Shikai Chen (www.csksoft.net). For any question, please contact via E-mail: 
+  CSK@live.com

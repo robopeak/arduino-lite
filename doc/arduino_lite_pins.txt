@@ -1,0 +1,55 @@
+PIN for standard arduino:
+
+// ATMEL ATMEGA8 & 168 
+//
+//                  +-\/-+
+//            PC6  1|    |28  PC5 (AI 5/*D19)
+//      (D 0) PD0  2|    |27  PC4 (AI 4/*D18)
+//      (D 1) PD1  3|    |26  PC3 (AI 3/*D17)
+//      (D 2) PD2  4|    |25  PC2 (AI 2/*D16)
+// PWM+ (D 3) PD3  5|    |24  PC1 (AI 1/*D15)
+//      (D 4) PD4  6|    |23  PC0 (AI 0/*D14)
+//            VCC  7|    |22  GND
+//            GND  8|    |21  AREF
+//     *(D20) PB6  9|    |20  AVCC
+//     *(D21) PB7 10|    |19  PB5 (D 13)
+// PWM+ (D 5) PD5 11|    |18  PB4 (D 12)
+// PWM+ (D 6) PD6 12|    |17  PB3 (D 11) PWM
+//      (D 7) PD7 13|    |16  PB2 (D 10) PWM
+//      (D 8) PB0 14|    |15  PB1 (D 9) PWM
+//                  +----+
+//
+// (PWM+ indicates the additional PWM pins on the ATmega168.)
+// Pins with the star(*): arduinoLite extention
+
+PIN for Attiny2313 (only in Arduino Lite)
+//Fuse setting for 2313: eFuse: 0xFF lFuse: 0xDF hFuse:0xDD
+
+//                               +-\/-+
+//                       RESET  1|    |20  VCC 
+//  D0               (RXD) PD0  2|    |19  PB7 (UCSK/SCL/PCINT7)    D14
+//  D1               (TXD) PD1  3|    |18  PB6 (MISO/DO/PCINT6)     D13
+//                 (XTAL2) PA1  4|    |17  PB5 (MOSI/DI/SDA/PCINT5) D12
+//                 (XTAL1) PA0  5|    |16  PB4 (OC1B/PCINT4)        D11 PWM
+//  D2    (CKOUT/XCK/INT0) PD2  6|    |15  PB3 (OC1A/PCINT3)        D10 PWM
+//  D3              (INT1) PD3  7|    |14  PB2 (OC0A/PCINT2)        D9  PWM
+//  D4                (T0) PD4  8|    |13  PB1 (AIN1/PCINT1)        D8
+//  PWM D5       (OC0B/T1) PD5  9|    |12  PB0 (AIN0/PCINT0)        D7
+//                         GND 10|    |11  PD6 (ICP)                D6
+//                               +----+
+
+PIN for Attiny26 (only in Arduino Lite)
+
+
+//                                    +-\/-+
+//  ~PWM  D0 MOSI/DI/SDA/!OC1A) PB0  1|    |20  PA0 (ADC0)               A0/D7
+//  PWM D1       (MISO/DO/OC1A) PB1  2|    |19  PA1 (ADC1)               A1/D8
+//  ~PWM  D2    (SCK/SCL/!OC1B) PB2  3|    |18  PA2 (ADC2)               A2/D9
+//  PWM D3               (OC1B) PB3  4|    |17  PA3 (AREF)
+//                              VCC  5|    |16  GND
+//                              GND  6|    |15  AVCC
+//  D4/A7          (ADC7/XTAL1) PB4  7|    |14  PA4 (ADC3)               A3/D10
+//  D5/A8          (ADC8/XTAL2) PB5  8|    |13  PA5 (ADC4)               A4/D11
+//  D6/A9        (ADC9/INT0/T0) PB6  9|    |12  PA6 (ADC5/AIN0)          A5/D12
+//                (ADC10/RESET) PB7 10|    |11  PA7 (ADC6/AIN1)          A6/D13
+//                                    +----+

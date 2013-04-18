@@ -1,0 +1,3 @@
+Bootloader code comes from the following source:
+1. Arduino Firmware ( Arduino.cc)
+2. BootloadHID Project (http://www.obdev.at/products/vusb/bootloadhid.html)
